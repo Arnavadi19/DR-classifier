@@ -11,7 +11,7 @@ REQUEST_TIMEOUT = 120  # seconds
 
 # --- UI SETUP ----------------------------------------------------------------
 st.set_page_config(page_title="DR Classifier", layout="wide")
-st.title("Diabetic Retinopathy (DR) Classifier 🩺")
+st.title("Diabetic Retinopathy (DR) Classifier ")
 st.write(
     "Upload a retinal fundus image to predict whether it shows no/mild DR or more than mild DR."
 )
