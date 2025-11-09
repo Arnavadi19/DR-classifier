@@ -18,3 +18,7 @@ checkpoints/*
 
 *.png
 *.csv
+*.ipynb
+*.pth
+aws/*
+api/aws/install
