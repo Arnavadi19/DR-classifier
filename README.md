@@ -370,7 +370,7 @@ Strong augmentation pipeline for medical images:
 
 ## Training Features
 
-- Focal Loss for class imbalance handling
+- Weighted cross entropy
 - Mixed Precision Training (AMP) for faster training
 - Cosine Annealing with Warm Restarts scheduler
 - Early Stopping to prevent overfitting
@@ -424,32 +424,6 @@ optimizer = optim.AdamW(model.parameters(), lr=1e-4)
 # Train
 trainer = Trainer(model, criterion, optimizer, device='cuda')
 history = trainer.fit(train_loader, val_loader, num_epochs=50)
-```
-
-### Handling Class Imbalance
-
-If the default focal loss doesn't work well, try:
-
-Option A: Weighted Sampling
-
-```python
-from torch.utils.data import WeightedRandomSampler
-
-# Calculate class weights
-class_counts = [2200, 1460]  # [Negative, Positive]
-class_weights = [1/c for c in class_counts]
-sample_weights = [class_weights[label] for label in labels]
-
-sampler = WeightedRandomSampler(sample_weights, len(sample_weights))
-train_loader = DataLoader(dataset, batch_size=32, sampler=sampler)
-```
-
-Option B: Weighted Loss
-
-```python
-# In config.py
-LOSS_FUNCTION = "weighted_ce"
-POS_WEIGHT = 1.5  # Increase to give more weight to positive class
 ```
 
 ## Citation
