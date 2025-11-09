@@ -1,0 +1,11 @@
+{
+  "total_images": 550,
+  "negative_images": 327,
+  "positive_images": 223,
+  "source_directory": "archive/gaussian_filtered_images",
+  "destination_directory": "/home/arnav/remidio/test_images",
+  "structure": {
+    "Negative": "327 images (No DR + Mild)",
+    "Positive": "223 images (Moderate + Severe + Proliferate DR)"
+  }
+}

@@ -22,3 +22,6 @@ checkpoints/*
 *.pth
 aws/*
 api/aws/install
+api/aws/README.md
+api/aws/THIRD_PARTY_LICENSES
+EDA.ipynb
