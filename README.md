@@ -1,11 +1,11 @@
 # Diabetic Retinopathy Binary Classification
 
-A production-ready deep learning pipeline for binary classification of Diabetic Retinopathy (DR) fundus images using PyTorch. This system classifies retinal images into two clinically relevant categories:
+A deep learning pipeline for binary classification of Diabetic Retinopathy (DR) fundus images using PyTorch. This system classifies retinal images into two clinically relevant categories:
 
 - **Negative**: No DR and Mild DR (non-referrable cases)
 - **Positive**: Moderate, Severe, and Proliferative DR (referrable cases requiring specialist evaluation)
 
-The project includes a complete machine learning workflow from training to deployment, featuring a FastAPI-based REST API for real-time inference.
+The project includes a complete machine learning workflow from training to deployment, featuring a FastAPI-based REST API for real-time inference. This project has been containerized and hosted on AWS ECR.
 
 ## Project Structure
 
@@ -49,7 +49,7 @@ remidio/
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.12 or higher
 - CUDA-capable GPU (recommended for training)
 - 8GB RAM minimum (16GB recommended)
 
@@ -72,9 +72,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 Install dependencies:
 
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-pip install timm albumentations opencv-python-headless pandas numpy scikit-learn matplotlib seaborn tqdm
-pip install fastapi uvicorn python-multipart
+pip install -r requirements.txt
 ```
 
 ### Dataset Preparation
@@ -91,6 +89,7 @@ archive/gaussian_filtered_images/
 ```
 
 The images should be preprocessed using the Ben Graham filter (Gaussian unsharp masking) to enhance microaneurysms and other DR lesions.
+The preprocessed dataset is available at [https://www.kaggle.com/datasets/sovitrath/diabetic-retinopathy-224x224-gaussian-filtered/data]
 
 ### Training
 
@@ -290,6 +289,8 @@ Then:
 
 The serverless deployment provides cost-effective inference with automatic scaling.
 
+The best_model.pth model weights have been uploaded to an S3 bucket and then get downloaded when the lambda function is called, to prevent initialisation errors (on AWS free-tier without provisioned concurrency). 
+
 ## Command-Line Inference
 
 For single-image predictions without the API:
@@ -315,13 +316,13 @@ print(f"Confidence: {result['confidence']:.2%}")
 predictor.visualize_prediction('path/to/image.png', save_path='output.png')
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 Modify `src/config.py` to customize training parameters:
 
 ```python
 # Model settings
-MODEL_NAME = "efficientnet_b3"  # Options: efficientnet_b3, vit_base_patch16_224, densenet121
+MODEL_NAME = "vit_base_patch16_224"  # Options: efficientnet_b3, vit_base_patch16_224, densenet121
 BATCH_SIZE = 32
 NUM_EPOCHS = 50
 LEARNING_RATE = 1e-4
@@ -336,17 +337,17 @@ OPTIMIZER = "adamw"  # Options: adam, adamw, sgd
 SCHEDULER = "cosine"  # Options: cosine, step, plateau
 ```
 
-## 🏗️ Model Architectures
+## Model Architectures
 
 The project supports three state-of-the-art architectures:
 
-### 1. EfficientNet-B3 (Recommended)
+### 1. EfficientNet-B3
 
 - Best balance of accuracy and efficiency
 - ~12M parameters
 - Fast inference (~15ms per image on GPU)
 
-### 2. Vision Transformer (ViT)
+### 2. Vision Transformer (ViT) (Used for deployment purpose)
 
 - State-of-the-art performance
 - ~86M parameters
@@ -378,15 +379,15 @@ Strong augmentation pipeline for medical images:
 
 ## Results
 
-Expected performance metrics:
+Expected performance metrics on ViT (approx.):
 
-- **Accuracy**: 85-90%
-- **F1 Score**: 0.85-0.92
-- **AUC-ROC**: 0.90-0.95
-- **Sensitivity**: 85-92% (catching positive cases)
-- **Specificity**: 85-90% (correctly identifying negatives)
+- **Accuracy**: 94%
+- **F1 Score**: 0.93
+- **AUC-ROC**: 0.98
+- **Sensitivity**: 95.5% (catching positive cases)
+- **Specificity**: 94% (correctly identifying negatives)
 
-## 📝 Dataset Split
+## Dataset Split
 
 - **Training**: 75% (~2,750 images)
 - **Validation**: 10% (~370 images)
@@ -394,7 +395,7 @@ Expected performance metrics:
 
 All splits use stratified sampling to maintain class balance.
 
-## 🔧 Advanced Usage
+## Advanced Usage
 
 ### Custom Training Loop
 
@@ -451,7 +452,7 @@ LOSS_FUNCTION = "weighted_ce"
 POS_WEIGHT = 1.5  # Increase to give more weight to positive class
 ```
 
-## 📖 Citation
+## Citation
 
 If you use this code in your research, please cite:
 
@@ -465,19 +466,19 @@ If you use this code in your research, please cite:
 }
 ```
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📧 Contact
+## Contact
 
 For questions or issues, please open an issue on GitHub or contact [arnavdt@gmail.com].
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - EfficientNet implementation from [timm](https://github.com/rwightman/pytorch-image-models)
 - Data augmentation using [Albumentations](https://albumentations.ai/)
