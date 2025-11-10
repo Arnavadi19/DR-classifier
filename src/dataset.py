@@ -104,7 +104,6 @@ def get_transforms(image_size=224, augment=True):
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.5),
             A.RandomRotate90(p=0.5),
-            # Fixed: Use Affine for Albumentations 2.x
             A.Affine(
                 translate_percent={"x": (-0.1, 0.1), "y": (-0.1, 0.1)},
                 scale=(0.85, 1.15),
@@ -125,14 +124,14 @@ def get_transforms(image_size=224, augment=True):
                 p=0.3
             ),
             
-            # Noise and blur - Fixed: Use std_range for Albumentations 2.x
+            # Noise and blur
             A.OneOf([
                 A.GaussNoise(std_range=(0.04, 0.2)),  # Normalized to [0, 1] range
                 A.GaussianBlur(blur_limit=(3, 5)),
                 A.MotionBlur(blur_limit=5),
             ], p=0.3),
             
-            # Cutout for regularization - Fixed: Use correct parameters for Albumentations 2.x
+            # Cutout for regularization
             A.CoarseDropout(
                 num_holes_range=(4, 8),
                 hole_height_range=(8, 16),
