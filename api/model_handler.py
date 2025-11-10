@@ -47,14 +47,6 @@ class DRClassifier(nn.Module):
         else:
             num_features = 768  # Default for ViT-B
         
-        # Custom classifier head - EXACT match to your training
-        # Based on checkpoint:
-        #   0: BatchNorm1d(768)
-        #   1: ReLU
-        #   2: Linear(768, 128)
-        #   3: ReLU
-        #   4: Dropout
-        #   5: Linear(128, 2)
         self.classifier = nn.Sequential(
             nn.BatchNorm1d(num_features),              # 0: BatchNorm
             nn.ReLU(),                                 # 1: ReLU
@@ -132,7 +124,7 @@ class DRModelHandler:
     def _load_model(self, model_path: str) -> nn.Module:
         """Load trained model from checkpoint"""
         
-        # Create model architecture (MUST match training)
+        # Create model architecture
         model = DRClassifier(
             model_name='vit_base_patch16_224',
             num_classes=2,

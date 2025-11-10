@@ -10,7 +10,7 @@ The project includes a complete machine learning workflow from training to deplo
 ## Project Structure
 
 ```
-remidio/
+directory/
 ├── api/                              # Production API
 │   ├── app.py                        # FastAPI application
 │   ├── model_handler.py              # Model loading and inference
